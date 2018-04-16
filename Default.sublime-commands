@@ -1,0 +1,7 @@
+[
+    {
+        "caption": "LSP: Setup dotty-language-server",
+        "command": "lsp_dotty_setup",
+        "args": {}
+    }
+]
