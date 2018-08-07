@@ -51,6 +51,13 @@ def sbt_is_installed() -> bool:
     return shutil.which("sbt") is not None
 
 
+def has_dotty_ide_file(window) -> bool:
+    if len(window.folders()) < 1:
+        return False
+    path = window.folders()[0]
+    return os.path.exists(os.path.join(path, ".dotty-ide.json"))
+
+
 class LspDottySetupCommand(sublime_plugin.WindowCommand):
     def run(self):
         if not java_is_installed():
@@ -91,6 +98,13 @@ class LspDottyPlugin(LanguageHandler):
             window.status_message(
                 "SBT must be installed to run {}".format(server_pkg_name))
             return False
+
+        if not has_dotty_ide_file(window):
+            window.status_message(
+                "A dotty project file must be generated before starting {}"
+                .format(server_pkg_name))
+            return False
+
         return True
 
     def on_initialized(self, client) -> None:
